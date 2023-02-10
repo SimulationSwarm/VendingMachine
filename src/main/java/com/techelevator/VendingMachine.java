@@ -28,11 +28,14 @@ public class VendingMachine {
     }
 
     public void makePurchase(String itemToPurchase) {
+        //todo (utilize inventory method)
         currentMoney -= inventory.getInventory().get(itemToPurchase).getCost();
         inventory.getInventory().get(itemToPurchase).reduceQuantity();
+        //TODO (no souts outside of UI)
         System.out.println(inventory.getInventory().get(itemToPurchase).getName() + " " +
                 inventory.getInventory().get(itemToPurchase).getCost() + " Current Balance: " +
                 getCurrentMoney());
+        //TODO (no souts outside of UI)
         System.out.println((inventory.getInventory().get(itemToPurchase).getMessage()));
         filePurchaseToLog(inventory.getInventory().get(itemToPurchase));
     }
@@ -55,11 +58,12 @@ public class VendingMachine {
         int nickels = change / 5;
         change = change % 5;
         int pennies = change;
+        //TODO (no souts outside of UI)
         System.out.println("Your change is: " + quarters + " quarters, " + dimes + " dimes, " + nickels + " nickels, "
         + pennies + " pennies.");
         fileDispenseChangeToLog();
     }
-
+        //TODO (maybe a Logger class?)
     public void filePurchaseToLog(Product product) {
         Date date = new Date();
         File log = new File("Log.txt");

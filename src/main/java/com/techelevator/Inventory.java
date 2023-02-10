@@ -14,21 +14,17 @@ public class Inventory {
         this.productsInInventory = productsInInventory;
     }
 
+    //TODO (make a method to manipulate inventory)
+
     public boolean checkInventory(String itemToPurchase) {
         return inventory.get(itemToPurchase).getQuantity() > 0;
     }
 
     public void displayInventory() {
+        //TODO (no souts outside of UI(?))
         for (Product product : productsInInventory) {
             System.out.println((product.getSlot() + ") " + product.getName() + " " + product.getCost()));
         }
-//        List<String> keys = new ArrayList<>(inventory.keySet());
-//        Collections.sort(keys);
-//        List<Product> products = new ArrayList<>(inventory.values());
-
-//        for (int i = 0; i < products.size(); i++) {
-//            inventoryDisplay.add(keys.get(i) + ") " + products.get(i).getName() + " " + products.get(i).getCost());
-//        }
     }
 
     public Map<String, Product> getInventory() {
