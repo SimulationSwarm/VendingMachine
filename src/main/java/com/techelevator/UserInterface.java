@@ -50,26 +50,24 @@ public class UserInterface {
             if (menuSelection.equals("1")) {
                 feedMoney();
                 } else if (menuSelection.equals("2")) {
-                vendingMachine.inventory.displayInventory();
-                String itemPurchased = userInput.nextLine();
-                if (vendingMachine.inventory.checkInventory(itemPurchased) && vendingMachine.checkMoney(itemPurchased)) {
-                    vendingMachine.makePurchase(itemPurchased);
-                } else {
-                    System.out.println("Insufficient Funds or Item Out of Stock.");
-                    vendingMachine.inventory.displayInventory();
-                }
+                purchaseProductMenu();
             }
         }
+        vendingMachine.giveBackChange();
+        vendingMachine.setCurrentMoney(0.0);
+        mainMenu();
+
+
     }
 
-    public void feedMoney() {
+    public void feedMoney() throws FileNotFoundException {
         System.out.println("(1) Add Money");
         System.out.println("(2) Current Balance");
         System.out.println("(3) Return to Previous Menu");
         String menuSelection = userInput.nextLine();
         while (!menuSelection.equals("3")) {
             if (menuSelection.equals("1")) {
-                System.out.println("How much would you like to add? Enter 0 to stop");
+                System.out.println("How much would you like to add?");
                 int moneyToAdd = Integer.parseInt(userInput.nextLine());
                 while (moneyToAdd != 0) {
                     if (moneyToAdd < 0) {
@@ -77,11 +75,31 @@ public class UserInterface {
                         return;
                     } else {
                         vendingMachine.addMoney(moneyToAdd);
+                        return;
                     }
                 }
+            } else if (menuSelection.equals("2")) {
+                System.out.println("Your current balance is " + vendingMachine.getCurrentMoney() + ".");
+                return;
             }
-            System.out.println("Your current balance is " + vendingMachine.getCurrentMoney() + ".");
-
         }
+        purchaseMenu();
     }
+
+    public void purchaseProductMenu() throws FileNotFoundException {
+        vendingMachine.inventory.displayInventory();
+        String itemPurchased = userInput.nextLine();
+        if (!vendingMachine.inventory.checkInventory(itemPurchased)) {
+            System.out.println("Selected item is out of stock.");
+            purchaseMenu();
+        }
+        if (!vendingMachine.checkMoney(itemPurchased)) {
+            System.out.println("Insufficient funds.");
+            purchaseMenu();
+        }
+        vendingMachine.makePurchase(itemPurchased);
+        purchaseMenu();
+
+    }
+
 }

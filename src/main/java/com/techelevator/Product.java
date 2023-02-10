@@ -14,7 +14,7 @@ public abstract class Product {
     }
 
     public void reduceQuantity() {
-        this.quantity--;
+        quantity -= 1;
     }
 
     public abstract String getMessage();

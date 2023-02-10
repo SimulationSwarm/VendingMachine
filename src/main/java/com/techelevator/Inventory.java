@@ -15,7 +15,7 @@ public class Inventory {
     }
 
     public boolean checkInventory(String itemToPurchase) {
-        return inventory.get(itemToPurchase).getQuantity() >= 0;
+        return inventory.get(itemToPurchase).getQuantity() > 0;
     }
 
     public void displayInventory() {
