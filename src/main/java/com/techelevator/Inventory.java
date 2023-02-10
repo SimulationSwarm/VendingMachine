@@ -23,7 +23,11 @@ public class Inventory {
     public void displayInventory() {
         //TODO (no souts outside of UI(?))
         for (Product product : productsInInventory) {
-            System.out.println((product.getSlot() + ") " + product.getName() + " " + product.getCost()));
+            if (product.getQuantity() > 0) {
+                System.out.println(product.getSlot() + ") " + product.getName() + " " + product.getCost());
+            } else {
+                System.out.println(product.getSlot() + ") " + product.getName() + " " + product.getCost() + " SOLD OUT");
+            }
         }
     }
 
@@ -34,5 +38,4 @@ public class Inventory {
     public List<Product> getProductsInInventory() {
         return productsInInventory;
     }
-
 }

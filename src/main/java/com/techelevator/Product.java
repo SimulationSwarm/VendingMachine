@@ -10,7 +10,6 @@ public abstract class Product {
         this.name = name;
         this.cost = cost;
         this.slot = slot;
-
     }
 
     public void reduceQuantity() {

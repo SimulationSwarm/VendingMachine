@@ -13,6 +13,5 @@ public class Application {
 		VendingMachine vendingMachine = new VendingMachine(inventory);
 		UserInterface ui = new UserInterface(vendingMachine);
 		ui.run();
-
 	}
 }

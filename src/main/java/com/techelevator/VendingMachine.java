@@ -5,6 +5,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Array;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class VendingMachine {
@@ -16,21 +18,29 @@ public class VendingMachine {
         this.inventory = inventory;
     }
 
-
-
     public void addMoney(int moneyToAdd) {
-        currentMoney += moneyToAdd;
-        fileDepositToLog(moneyToAdd);
+        if (moneyToAdd > 0) {
+            currentMoney += moneyToAdd;
+            fileDepositToLog(moneyToAdd);
+        }
     }
 
     public void setCurrentMoney(Double currentMoney) {
-        this.currentMoney = currentMoney;
+        if(currentMoney > 0) {
+            this.currentMoney = currentMoney;
+        }
     }
 
     public void makePurchase(String itemToPurchase) {
         //todo (utilize inventory method)
         currentMoney -= inventory.getInventory().get(itemToPurchase).getCost();
         inventory.getInventory().get(itemToPurchase).reduceQuantity();
+        for (Product product : inventory.getProductsInInventory()) {
+            if (product.getSlot().equals(itemToPurchase)) {
+                product.reduceQuantity();
+            }
+        }
+
         //TODO (no souts outside of UI)
         System.out.println(inventory.getInventory().get(itemToPurchase).getName() + " " +
                 inventory.getInventory().get(itemToPurchase).getCost() + " Current Balance: " +
@@ -59,16 +69,17 @@ public class VendingMachine {
         change = change % 5;
         int pennies = change;
         //TODO (no souts outside of UI)
-        System.out.println("Your change is: " + quarters + " quarters, " + dimes + " dimes, " + nickels + " nickels, "
+        System.out.println("Your change is: " + quarters + " quarters, " + dimes + " dimes, " + nickels + " nickels, and "
         + pennies + " pennies.");
         fileDispenseChangeToLog();
     }
         //TODO (maybe a Logger class?)
     public void filePurchaseToLog(Product product) {
-        Date date = new Date();
         File log = new File("Log.txt");
+        String dateTimeForOutput = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy h:mm:ss a"));
+
         try (PrintWriter pw = new PrintWriter(new FileWriter(log, true))) {
-            pw.println(String.valueOf(date) + " " + date.getTime() + " " + product.getName() + " " + product.getSlot()
+            pw.println(dateTimeForOutput + " " + product.getName() + " " + product.getSlot()
                     + " " + "$" + product.getCost() + " " + "$" + currentMoney);
         } catch (IOException e) {
             System.out.println("Nope!");
@@ -76,10 +87,11 @@ public class VendingMachine {
     }
 
     public void fileDepositToLog(int amountToDeposit) {
-        Date date = new Date();
         File log = new File("Log.txt");
+        String dateTimeForOutput = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy h:mm:ss a"));
+
         try (PrintWriter pw = new PrintWriter(new FileWriter(log, true))) {
-        pw.println(String.valueOf(date) + " " + date.getTime() + " " + "FEED MONEY: " + "$" + amountToDeposit
+        pw.println(dateTimeForOutput + " " + "FEED MONEY: " + "$" + amountToDeposit
                 + ".00 " + "$" + currentMoney);
         } catch (IOException e) {
             System.out.println("Nope!");
@@ -87,10 +99,10 @@ public class VendingMachine {
     }
 
     public void fileDispenseChangeToLog() {
-        Date date = new Date();
         File log = new File("Log.txt");
+        String dateTimeForOutput = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy h:mm:ss a"));
         try (PrintWriter pw = new PrintWriter(new FileWriter(log, true))) {
-            pw.println(String.valueOf(date) + " " + date.getTime() + " GIVE CHANGE: " + "$" + currentMoney + " $0.00");
+            pw.println(dateTimeForOutput + " GIVE CHANGE: " + "$" + currentMoney + " $0.00");
 
         } catch (IOException e) {
             System.out.println("Nope!");

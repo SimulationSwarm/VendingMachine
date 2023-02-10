@@ -25,6 +25,7 @@ public class UserInterface {
             System.out.println("(2) Purchase");
             System.out.println("(3) Exit");
             menuSelection = userInput.nextLine();
+
             if (menuSelection.equals("1")) {
                 vendingMachine.inventory.displayInventory();
             } else if (menuSelection.equals("2")) {
@@ -46,9 +47,12 @@ public class UserInterface {
             System.out.println("(2) Select Product");
             System.out.println("(3) Finish Transaction");
             purchaseMenuSelection = userInput.nextLine();
+            if (!purchaseMenuSelection.equals("1") && !purchaseMenuSelection.equals("2") && !purchaseMenuSelection.equals("3")) {
+                System.out.println("Invalid input, try again.");
+            }
             if (purchaseMenuSelection.equals("1")) {
                 feedMoney();
-                } else if (purchaseMenuSelection.equals("2")) {
+            } else if (purchaseMenuSelection.equals("2")) {
                 purchaseProductMenu();
             }
         }
@@ -63,14 +67,22 @@ public class UserInterface {
             System.out.println("(2) Current Balance");
             System.out.println("(3) Return to Previous Menu");
             feedMoneyMenuSelection = userInput.nextLine();
+            if (!feedMoneyMenuSelection.equals("1") && !feedMoneyMenuSelection.equals("2") && !feedMoneyMenuSelection.equals("3")) {
+                System.out.println("Invalid input, try again.");
+            }
             if (feedMoneyMenuSelection.equals("1")) {
                 System.out.println("How much would you like to add?");
-                int moneyToAdd = Integer.parseInt(userInput.nextLine());
+                try {
+                    int moneyToAdd = Integer.parseInt(userInput.nextLine());
+
                     if (moneyToAdd < 0) {
                         System.out.println("Invalid amount.");
                     } else {
                         vendingMachine.addMoney(moneyToAdd);
                     }
+                } catch (NumberFormatException e) {
+                    System.out.println("Please enter a numerical number.");
+                }
             } else if (feedMoneyMenuSelection.equals("2")) {
                 System.out.println("Your current balance is " + vendingMachine.getCurrentMoney() + ".");
             }
@@ -80,12 +92,17 @@ public class UserInterface {
     public void purchaseProductMenu() throws FileNotFoundException {
         vendingMachine.inventory.displayInventory();
         String itemPurchased = userInput.nextLine();
+        if (!vendingMachine.inventory.getInventory().keySet().contains(itemPurchased)) {
+            System.out.println("Invalid entry, try again");
+            return;
+        }
         if (!vendingMachine.inventory.checkInventory(itemPurchased)) {
             System.out.println("Selected item is out of stock.");
-
+            return;
         }
         if (!vendingMachine.checkMoney(itemPurchased)) {
             System.out.println("Insufficient funds.");
+            return;
         }
         vendingMachine.makePurchase(itemPurchased);
     }
