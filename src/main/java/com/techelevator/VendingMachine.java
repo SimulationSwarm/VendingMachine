@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.sql.Array;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -13,6 +16,8 @@ public class VendingMachine {
     Inventory inventory;
     UserInterface userInterface;
     private double currentMoney = 0.0;
+    private double totalSales = 0.00;
+
 
     public VendingMachine(Inventory inventory) {
         this.inventory = inventory;
@@ -32,7 +37,9 @@ public class VendingMachine {
     }
 
     public void makePurchase(String itemToPurchase) {
+
         //todo (utilize inventory method)
+        totalSales += inventory.getInventory().get(itemToPurchase).getCost();
         currentMoney -= inventory.getInventory().get(itemToPurchase).getCost();
         inventory.getInventory().get(itemToPurchase).reduceQuantity();
         for (Product product : inventory.getProductsInInventory()) {
@@ -59,7 +66,9 @@ public class VendingMachine {
         return currentMoney;
     }
 
-    public void giveBackChange() {
+    public int[] makeChange() {
+        int[] changeArray = new int[4];
+
         int change = (int)(Math.ceil(currentMoney * 100));
         int quarters = change / 25;
         change = change % 25;
@@ -68,11 +77,43 @@ public class VendingMachine {
         int nickels = change / 5;
         change = change % 5;
         int pennies = change;
+
+        changeArray[0] = quarters;
+        changeArray[1] = dimes;
+        changeArray[2] = nickels;
+        changeArray[3] = pennies;
         //TODO (no souts outside of UI)
-        System.out.println("Your change is: " + quarters + " quarters, " + dimes + " dimes, " + nickels + " nickels, and "
-        + pennies + " pennies.");
-        fileDispenseChangeToLog();
+        return changeArray;
+
+
     }
+    public String giveBackChange() {
+        int[] changeArray = makeChange();
+        String pennies = "pennies";
+        String nickels = "nickels";
+        String dimes = "dimes";
+        String quarters = "quarters";
+
+        if(changeArray[0] == 1) {
+            quarters = "quarter";
+        }
+        if(changeArray[1] == 1) {
+            dimes = "dime";
+        }
+        if(changeArray[2] == 1) {
+            nickels = "nickel";
+        }
+        if(changeArray[3] == 1) {
+            pennies = "penny";
+        }
+
+        String giveBackChange = "Your change is: " + changeArray[0] + " " + quarters + ", " + changeArray[1] + " " +
+                dimes + ", " + changeArray[2] + " " + nickels + ", and " + changeArray[3] + " " + pennies + ".";
+        fileDispenseChangeToLog();
+
+        return giveBackChange;
+    }
+
         //TODO (maybe a Logger class?)
     public void filePurchaseToLog(Product product) {
         File log = new File("Log.txt");
@@ -108,4 +149,18 @@ public class VendingMachine {
             System.out.println("Nope!");
         }
     }
+    public void createSalesReport() {
+        String salesReportFile = "Sales-Report-" +
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy-h-mm-ssa"));
+        File salesReport = new File(salesReportFile + ".txt");
+        try (PrintWriter pw = new PrintWriter(new FileWriter(salesReport, true))) {
+            pw.println("Total Sales: " + totalSales);
+        } catch (IOException e) {
+            System.out.println("Failed to create file, try again.");
+
+        }
+
+    }
+
+
 }

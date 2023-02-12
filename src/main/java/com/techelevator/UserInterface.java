@@ -4,7 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-public class UserInterface {
+public class
+UserInterface {
     VendingMachine vendingMachine;
 
     public UserInterface(VendingMachine vendingMachine) {
@@ -34,6 +35,8 @@ public class UserInterface {
             } else if (menuSelection.equals("3")) {
                 System.out.println("Goodbye!");
                 System.exit(1);
+            } else if (menuSelection.equals("4")) {
+              vendingMachine.createSalesReport();
             } else {
                 System.out.println("Invalid input, try again.");
             }
@@ -56,7 +59,7 @@ public class UserInterface {
                 purchaseProductMenu();
             }
         }
-        vendingMachine.giveBackChange();
+        System.out.println(vendingMachine.giveBackChange());
         vendingMachine.setCurrentMoney(0.0);
     }
 
