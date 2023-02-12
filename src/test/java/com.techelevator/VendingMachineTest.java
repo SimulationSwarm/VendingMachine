@@ -11,8 +11,8 @@ public class VendingMachineTest {
     @Test
     public void what_if_add_negative_money() throws FileNotFoundException {
         FileParser fileParser = new FileParser("vendingmachine.csv");
-        Inventory inventory = new Inventory(fileParser.buildVendingMachineInventory(fileParser.buildProductList()), fileParser.buildProductList());
-        VendingMachine vendingMachine = new VendingMachine(inventory);
+        Inventory inventory = new Inventory(fileParser.buildVendingMachineInventory());
+        VendingMachine vendingMachine = new VendingMachine(inventory, inventory.buildProductList());
         vendingMachine.addMoney(-5);
         Assert.assertEquals(0.0, vendingMachine.getCurrentMoney(), 0.01);
     }
@@ -20,8 +20,8 @@ public class VendingMachineTest {
     @Test
     public void what_if_setCurrentMoney_is_passed_negative_number() throws FileNotFoundException {
         FileParser fileParser = new FileParser("vendingmachine.csv");
-        Inventory inventory = new Inventory(fileParser.buildVendingMachineInventory(fileParser.buildProductList()), fileParser.buildProductList());
-        VendingMachine sut = new VendingMachine(inventory);
+        Inventory inventory = new Inventory(fileParser.buildVendingMachineInventory());
+        VendingMachine sut = new VendingMachine(inventory, inventory.buildProductList());
         sut.setCurrentMoney(-4.0);
         Assert.assertEquals(0, sut.getCurrentMoney(), 0.01);
     }

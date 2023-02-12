@@ -14,13 +14,16 @@ import java.util.*;
 
 public class VendingMachine {
     Inventory inventory;
-    UserInterface userInterface;
+    private List<Product> productList;
     private double currentMoney = 0.0;
     private double totalSales = 0.00;
 
 
-    public VendingMachine(Inventory inventory) {
+
+
+    public VendingMachine(Inventory inventory, List<Product> productList) {
         this.inventory = inventory;
+        this.productList = productList;
     }
 
     public void addMoney(int moneyToAdd) {
@@ -42,24 +45,23 @@ public class VendingMachine {
         totalSales += inventory.getInventory().get(itemToPurchase).getCost();
         currentMoney -= inventory.getInventory().get(itemToPurchase).getCost();
         inventory.getInventory().get(itemToPurchase).reduceQuantity();
-        for (Product product : inventory.getProductsInInventory()) {
-            if (product.getSlot().equals(itemToPurchase)) {
-                product.reduceQuantity();
-            }
-        }
-
-        //TODO (no souts outside of UI)
-        System.out.println(inventory.getInventory().get(itemToPurchase).getName() + " " +
-                inventory.getInventory().get(itemToPurchase).getCost() + " Current Balance: " +
-                getCurrentMoney());
-        //TODO (no souts outside of UI)
-        System.out.println((inventory.getInventory().get(itemToPurchase).getMessage()));
         filePurchaseToLog(inventory.getInventory().get(itemToPurchase));
     }
 
 
     public boolean checkMoney(String itemToPurchase) {
           return (inventory.getInventory().get(itemToPurchase).getCost() <= currentMoney);
+    }
+
+    public void displayInventory() {
+        //TODO (no souts outside of UI(?))
+        for (Product product : productList) {
+            if (product.getQuantity() > 0) {
+                System.out.println(product.getSlot() + ") " + product.getName() + " " + product.getCost());
+            } else {
+                System.out.println(product.getSlot() + ") " + product.getName() + " " + product.getCost() + " SOLD OUT");
+            }
+        }
     }
 
     public Double getCurrentMoney() {
@@ -82,11 +84,9 @@ public class VendingMachine {
         changeArray[1] = dimes;
         changeArray[2] = nickels;
         changeArray[3] = pennies;
-        //TODO (no souts outside of UI)
         return changeArray;
-
-
     }
+
     public String giveBackChange() {
         int[] changeArray = makeChange();
         String pennies = "pennies";
@@ -127,6 +127,8 @@ public class VendingMachine {
         }
     }
 
+
+
     public void fileDepositToLog(int amountToDeposit) {
         File log = new File("Log.txt");
         String dateTimeForOutput = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy h:mm:ss a"));
@@ -149,6 +151,7 @@ public class VendingMachine {
             System.out.println("Nope!");
         }
     }
+
     public void createSalesReport() {
         String salesReportFile = "Sales-Report-" +
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy-h-mm-ssa"));
@@ -159,8 +162,5 @@ public class VendingMachine {
             System.out.println("Failed to create file, try again.");
 
         }
-
     }
-
-
 }

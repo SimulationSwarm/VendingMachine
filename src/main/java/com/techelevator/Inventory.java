@@ -1,17 +1,18 @@
 package com.techelevator;
 
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class Inventory {
 
     private Map<String, Product> inventory;
-    private List<Product> productsInInventory;
 
 
-    public Inventory(Map<String, Product> inventory, List<Product> productsInInventory) {
+
+    public Inventory(Map<String, Product> inventory) {
         this.inventory = inventory;
-        this.productsInInventory = productsInInventory;
     }
 
     //TODO (make a method to manipulate inventory)
@@ -20,22 +21,28 @@ public class Inventory {
         return inventory.get(itemToPurchase).getQuantity() > 0;
     }
 
-    public void displayInventory() {
-        //TODO (no souts outside of UI(?))
-        for (Product product : productsInInventory) {
-            if (product.getQuantity() > 0) {
-                System.out.println(product.getSlot() + ") " + product.getName() + " " + product.getCost());
-            } else {
-                System.out.println(product.getSlot() + ") " + product.getName() + " " + product.getCost() + " SOLD OUT");
-            }
+
+
+    public List<Product> buildProductList() throws FileNotFoundException {
+        List<Product> productArrayList = new ArrayList<>();
+        for (Product product : inventory.values()) {
+            productArrayList.add(product);
         }
+//        try (Scanner inventoryReader = new Scanner(file)) {
+//            while (inventoryReader.hasNextLine()) {
+//                String currentLine = inventoryReader.nextLine();
+//                productArrayList.add(getProductFromLine(currentLine));
+//            }
+//
+//        }   catch (FileNotFoundException  e) {
+//            System.out.println("Invalid file path, try again.");
+//        }
+        return productArrayList;
     }
 
     public Map<String, Product> getInventory() {
         return inventory;
     }
 
-    public List<Product> getProductsInInventory() {
-        return productsInInventory;
-    }
+
 }

@@ -11,30 +11,24 @@ public class FileParser {
     }
 
 
-    public Map<String,Product> buildVendingMachineInventory(List<Product> productList) throws FileNotFoundException {
+    public Map<String,Product> buildVendingMachineInventory() throws FileNotFoundException {
         Map<String, Product> vendingMachineInventory = new HashMap<>();
-
-        for (int i = 0; i < productList.size(); i++) {
-            vendingMachineInventory.put(productList.get(i).getSlot(), productList.get(i));
-        }
-        return vendingMachineInventory;
-    }
-
-    public List<Product> buildProductList() throws FileNotFoundException {
-        List<Product> productArrayList = new ArrayList<>();
         File file = new File(inventoryPath);
-
         try (Scanner inventoryReader = new Scanner(file)) {
             while (inventoryReader.hasNextLine()) {
                 String currentLine = inventoryReader.nextLine();
-                productArrayList.add(getProductFromLine(currentLine));
+                vendingMachineInventory.put(getProductFromLine(currentLine).getSlot(),getProductFromLine(currentLine));
             }
-
         }   catch (FileNotFoundException  e) {
-            System.out.println("Invalid file path, try again.");
-        }
-        return productArrayList;
+                    System.out.println("Invalid file path, try again.");
+            }
+//        for (int i = 0; i < productList.size(); i++) {
+//            vendingMachineInventory.put(productList.get(i).getSlot(), productList.get(i));
+//        }
+        return vendingMachineInventory;
     }
+
+
 
 
     public Product getProductFromLine(String line) {

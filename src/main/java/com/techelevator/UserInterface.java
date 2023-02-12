@@ -28,7 +28,7 @@ UserInterface {
             menuSelection = userInput.nextLine();
 
             if (menuSelection.equals("1")) {
-                vendingMachine.inventory.displayInventory();
+                vendingMachine.displayInventory();
             } else if (menuSelection.equals("2")) {
                 purchaseMenu();
 
@@ -93,7 +93,7 @@ UserInterface {
     }
 
     public void purchaseProductMenu() throws FileNotFoundException {
-        vendingMachine.inventory.displayInventory();
+        vendingMachine.displayInventory();
         String itemPurchased = userInput.nextLine();
         if (!vendingMachine.inventory.getInventory().keySet().contains(itemPurchased)) {
             System.out.println("Invalid entry, try again");
@@ -108,5 +108,9 @@ UserInterface {
             return;
         }
         vendingMachine.makePurchase(itemPurchased);
+        System.out.println(vendingMachine.inventory.getInventory().get(itemPurchased).getName() + " " +
+                vendingMachine.inventory.getInventory().get(itemPurchased).getCost() + " Current Balance: " +
+                vendingMachine.getCurrentMoney());
+        System.out.println((vendingMachine.inventory.getInventory().get(itemPurchased).getMessage()));
     }
 }
