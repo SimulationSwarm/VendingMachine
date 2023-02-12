@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
+import java.math.BigDecimal;
 import java.util.Optional;
 
 public class VendingMachineTest {
@@ -13,8 +14,8 @@ public class VendingMachineTest {
         FileParser fileParser = new FileParser("vendingmachine.csv");
         Inventory inventory = new Inventory(fileParser.buildVendingMachineInventory());
         VendingMachine vendingMachine = new VendingMachine(inventory, inventory.buildProductList());
-        vendingMachine.addMoney(-5);
-        Assert.assertEquals(0.0, vendingMachine.getCurrentMoney(), 0.01);
+        vendingMachine.addMoney(BigDecimal.valueOf(-5));
+        Assert.assertEquals(0.0, vendingMachine.getCurrentMoney().doubleValue(), 0.01);
     }
 
     @Test
@@ -22,7 +23,7 @@ public class VendingMachineTest {
         FileParser fileParser = new FileParser("vendingmachine.csv");
         Inventory inventory = new Inventory(fileParser.buildVendingMachineInventory());
         VendingMachine sut = new VendingMachine(inventory, inventory.buildProductList());
-        sut.setCurrentMoney(-4.0);
-        Assert.assertEquals(0, sut.getCurrentMoney(), 0.01);
+        sut.setCurrentMoney(BigDecimal.valueOf(-4.0));
+        Assert.assertEquals(0, sut.getCurrentMoney().doubleValue(), 0.01);
     }
 }

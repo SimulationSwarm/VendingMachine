@@ -2,6 +2,8 @@ package com.techelevator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class
@@ -60,7 +62,7 @@ UserInterface {
             }
         }
         System.out.println(vendingMachine.giveBackChange());
-        vendingMachine.setCurrentMoney(0.0);
+        vendingMachine.setCurrentMoney(BigDecimal.valueOf(0.0));
     }
 
     public void feedMoney() throws FileNotFoundException {
@@ -76,9 +78,9 @@ UserInterface {
             if (feedMoneyMenuSelection.equals("1")) {
                 System.out.println("How much would you like to add?");
                 try {
-                    int moneyToAdd = Integer.parseInt(userInput.nextLine());
+                    BigDecimal moneyToAdd = BigDecimal.valueOf(Long.parseLong(userInput.nextLine()));
 
-                    if (moneyToAdd < 0) {
+                    if (moneyToAdd.intValue() < 0) {
                         System.out.println("Invalid amount.");
                     } else {
                         vendingMachine.addMoney(moneyToAdd);

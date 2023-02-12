@@ -1,12 +1,15 @@
 package com.techelevator;
 
+import java.math.BigDecimal;
+import java.util.Comparator;
+
 public abstract class Product {
     private String name;
-    private Double cost;
+    private BigDecimal cost = new BigDecimal("00.00");
     private String slot;
     private int quantity = 5;
 
-    public Product(String name, double cost, String slot) {
+    public Product(String name, BigDecimal cost, String slot) {
         this.name = name;
         this.cost = cost;
         this.slot = slot;
@@ -30,7 +33,16 @@ public abstract class Product {
         return name;
     }
 
-    public double getCost() {
+    public BigDecimal getCost() {
         return cost;
     }
+
 }
+
+ class Sortbyslot implements Comparator<Product> {
+
+     @Override
+     public int compare(Product a, Product b) {
+         return a.getSlot().compareTo(b.getSlot());
+     }
+ }

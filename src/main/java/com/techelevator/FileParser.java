@@ -1,6 +1,7 @@
 package com.techelevator;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.util.*;
 
 public class FileParser {
@@ -36,7 +37,7 @@ public class FileParser {
         String[] lineParts = line.split("\\|");
         String productSlot = lineParts[0];
         String productName = lineParts[1];
-        double productPrice = Double.parseDouble(lineParts[2]);
+        BigDecimal productPrice = new BigDecimal(lineParts[2]);
         String productType = lineParts[3];
         if(productType.equals("Gum")) {
             newProduct = new Gum(productName, productPrice, productSlot);

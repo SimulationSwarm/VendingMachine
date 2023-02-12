@@ -1,13 +1,10 @@
 package com.techelevator;
 
+import java.math.BigDecimal;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.sql.Array;
-import java.text.DecimalFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -15,46 +12,45 @@ import java.util.*;
 public class VendingMachine {
     Inventory inventory;
     private List<Product> productList;
-    private double currentMoney = 0.0;
-    private double totalSales = 0.00;
-
-
-
+    private BigDecimal currentMoney = new BigDecimal("00.00");
+    private BigDecimal totalSales = new BigDecimal("00.00");
 
     public VendingMachine(Inventory inventory, List<Product> productList) {
         this.inventory = inventory;
         this.productList = productList;
     }
 
-    public void addMoney(int moneyToAdd) {
-        if (moneyToAdd > 0) {
-            currentMoney += moneyToAdd;
+    public void addMoney(BigDecimal moneyToAdd) {
+            currentMoney = currentMoney.add(moneyToAdd);
             fileDepositToLog(moneyToAdd);
-        }
+
     }
 
-    public void setCurrentMoney(Double currentMoney) {
-        if(currentMoney > 0) {
+    public void setCurrentMoney(BigDecimal currentMoney) {
             this.currentMoney = currentMoney;
-        }
+
     }
 
     public void makePurchase(String itemToPurchase) {
 
         //todo (utilize inventory method)
-        totalSales += inventory.getInventory().get(itemToPurchase).getCost();
-        currentMoney -= inventory.getInventory().get(itemToPurchase).getCost();
+        totalSales  = totalSales.add(inventory.getInventory().get(itemToPurchase).getCost());
+
+        currentMoney =  currentMoney.subtract(inventory.getInventory().get(itemToPurchase).getCost());
+
+
         inventory.getInventory().get(itemToPurchase).reduceQuantity();
         filePurchaseToLog(inventory.getInventory().get(itemToPurchase));
     }
 
 
     public boolean checkMoney(String itemToPurchase) {
-          return (inventory.getInventory().get(itemToPurchase).getCost() <= currentMoney);
+          return (inventory.getInventory().get(itemToPurchase).getCost().intValue() <= currentMoney.intValue());
     }
 
     public void displayInventory() {
         //TODO (no souts outside of UI(?))
+       // Collections.sort(productList);
         for (Product product : productList) {
             if (product.getQuantity() > 0) {
                 System.out.println(product.getSlot() + ") " + product.getName() + " " + product.getCost());
@@ -64,14 +60,14 @@ public class VendingMachine {
         }
     }
 
-    public Double getCurrentMoney() {
+    public BigDecimal getCurrentMoney() {
         return currentMoney;
     }
 
     public int[] makeChange() {
         int[] changeArray = new int[4];
-
-        int change = (int)(Math.ceil(currentMoney * 100));
+        BigDecimal temp = new BigDecimal("100.00");
+        int change = (currentMoney.multiply(temp)).intValue();
         int quarters = change / 25;
         change = change % 25;
         int dimes = change / 10;
@@ -129,7 +125,7 @@ public class VendingMachine {
 
 
 
-    public void fileDepositToLog(int amountToDeposit) {
+    public void fileDepositToLog(BigDecimal amountToDeposit) {
         File log = new File("Log.txt");
         String dateTimeForOutput = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy h:mm:ss a"));
 

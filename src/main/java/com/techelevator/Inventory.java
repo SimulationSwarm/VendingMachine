@@ -1,9 +1,7 @@
 package com.techelevator;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Inventory {
 
@@ -25,18 +23,8 @@ public class Inventory {
 
     public List<Product> buildProductList() throws FileNotFoundException {
         List<Product> productArrayList = new ArrayList<>();
-        for (Product product : inventory.values()) {
-            productArrayList.add(product);
-        }
-//        try (Scanner inventoryReader = new Scanner(file)) {
-//            while (inventoryReader.hasNextLine()) {
-//                String currentLine = inventoryReader.nextLine();
-//                productArrayList.add(getProductFromLine(currentLine));
-//            }
-//
-//        }   catch (FileNotFoundException  e) {
-//            System.out.println("Invalid file path, try again.");
-//        }
+        productArrayList.addAll(inventory.values());
+        Collections.sort(productArrayList, new Sortbyslot());
         return productArrayList;
     }
 
