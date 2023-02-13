@@ -11,7 +11,6 @@ public class FileParser {
         this.inventoryPath = inventoryPath;
     }
 
-
     public Map<String,Product> buildVendingMachineInventory() throws FileNotFoundException {
         Map<String, Product> vendingMachineInventory = new HashMap<>();
         File file = new File(inventoryPath);
@@ -28,10 +27,6 @@ public class FileParser {
 //        }
         return vendingMachineInventory;
     }
-
-
-
-
     public Product getProductFromLine(String line) {
         Product newProduct;
         String[] lineParts = line.split("\\|");
@@ -50,9 +45,4 @@ public class FileParser {
         }
         return newProduct;
     }
-
-
-
-
-
 }

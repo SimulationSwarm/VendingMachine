@@ -4,11 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Inventory {
-
     private Map<String, Product> inventory;
-
-
-
     public Inventory(Map<String, Product> inventory) {
         this.inventory = inventory;
     }
@@ -18,8 +14,6 @@ public class Inventory {
     public boolean checkInventory(String itemToPurchase) {
         return inventory.get(itemToPurchase).getQuantity() > 0;
     }
-
-
 
     public List<Product> buildProductList() throws FileNotFoundException {
         List<Product> productArrayList = new ArrayList<>();

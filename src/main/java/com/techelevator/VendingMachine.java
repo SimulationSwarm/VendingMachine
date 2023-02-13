@@ -20,48 +20,29 @@ public class VendingMachine {
         this.productList = productList;
     }
 
+    public BigDecimal getCurrentMoney() {
+        return currentMoney;
+    }
+
+    public boolean checkMoney(String itemToPurchase) {
+        return (inventory.getInventory().get(itemToPurchase).getCost().intValue() <= currentMoney.intValue());
+    }
+
     public void addMoney(BigDecimal moneyToAdd) {
             currentMoney = currentMoney.add(moneyToAdd);
             fileDepositToLog(moneyToAdd);
-
     }
 
     public void setCurrentMoney(BigDecimal currentMoney) {
             this.currentMoney = currentMoney;
-
     }
 
     public void makePurchase(String itemToPurchase) {
-
         //todo (utilize inventory method)
         totalSales  = totalSales.add(inventory.getInventory().get(itemToPurchase).getCost());
-
         currentMoney =  currentMoney.subtract(inventory.getInventory().get(itemToPurchase).getCost());
-
-
         inventory.getInventory().get(itemToPurchase).reduceQuantity();
         filePurchaseToLog(inventory.getInventory().get(itemToPurchase));
-    }
-
-
-    public boolean checkMoney(String itemToPurchase) {
-          return (inventory.getInventory().get(itemToPurchase).getCost().intValue() <= currentMoney.intValue());
-    }
-
-    public void displayInventory() {
-        //TODO (no souts outside of UI(?))
-       // Collections.sort(productList);
-        for (Product product : productList) {
-            if (product.getQuantity() > 0) {
-                System.out.println(product.getSlot() + ") " + product.getName() + " " + product.getCost());
-            } else {
-                System.out.println(product.getSlot() + ") " + product.getName() + " " + product.getCost() + " SOLD OUT");
-            }
-        }
-    }
-
-    public BigDecimal getCurrentMoney() {
-        return currentMoney;
     }
 
     public int[] makeChange() {
@@ -110,6 +91,18 @@ public class VendingMachine {
         return giveBackChange;
     }
 
+    public void displayInventory() {
+        //TODO (no souts outside of UI(?))
+       // Collections.sort(productList);
+        for (Product product : productList) {
+            if (product.getQuantity() > 0) {
+                System.out.println(product.getSlot() + ") " + product.getName() + " " + product.getCost());
+            } else {
+                System.out.println(product.getSlot() + ") " + product.getName() + " " + product.getCost() + " SOLD OUT");
+            }
+        }
+    }
+
         //TODO (maybe a Logger class?)
     public void filePurchaseToLog(Product product) {
         File log = new File("Log.txt");
@@ -122,8 +115,6 @@ public class VendingMachine {
             System.out.println("Nope!");
         }
     }
-
-
 
     public void fileDepositToLog(BigDecimal amountToDeposit) {
         File log = new File("Log.txt");
@@ -142,7 +133,6 @@ public class VendingMachine {
         String dateTimeForOutput = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM/dd/yyyy h:mm:ss a"));
         try (PrintWriter pw = new PrintWriter(new FileWriter(log, true))) {
             pw.println(dateTimeForOutput + " GIVE CHANGE: " + "$" + currentMoney + " $0.00");
-
         } catch (IOException e) {
             System.out.println("Nope!");
         }
@@ -156,7 +146,6 @@ public class VendingMachine {
             pw.println("Total Sales: " + totalSales);
         } catch (IOException e) {
             System.out.println("Failed to create file, try again.");
-
         }
     }
 }
