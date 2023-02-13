@@ -143,7 +143,11 @@ public class VendingMachine {
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM-dd-yyyy-h-mm-ssa"));
         File salesReport = new File(salesReportFile + ".txt");
         try (PrintWriter pw = new PrintWriter(new FileWriter(salesReport, true))) {
-            pw.println("Total Sales: " + totalSales);
+            for (Product product : productList) {
+                pw.println(product.getName() + "|" + Math.abs(product.getQuantity() - 5));
+            }
+            pw.println();
+            pw.println("**Total Sales** " + totalSales);
         } catch (IOException e) {
             System.out.println("Failed to create file, try again.");
         }
