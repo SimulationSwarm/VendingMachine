@@ -26,7 +26,7 @@ public class VendingMachine {
 
     public boolean checkMoney(String itemToPurchase) {
         int compareTo = currentMoney.compareTo(inventory.getInventory().get(itemToPurchase).getCost());
-        if (compareTo == 1) {
+        if (compareTo == 1 || compareTo == 0) {
             return true;
         }
         return false;
@@ -96,16 +96,18 @@ public class VendingMachine {
         return giveBackChange;
     }
 
-    public void displayInventory() {
-        //TODO (no souts outside of UI(?))
-       // Collections.sort(productList);
-        for (Product product : productList) {
-            if (product.getQuantity() > 0) {
-                System.out.println(product.getSlot() + ") " + product.getName() + " " + product.getCost());
+    public String[] displayInventory() {
+        String[] inventory = new String[productList.size()];
+        for (int i = 0; i < productList.size(); i++) {
+            if (productList.get(i).getQuantity() > 0) {
+               inventory[i] = productList.get(i).getSlot() + ") " + productList.get(i).getName() + " " +
+                       productList.get(i).getCost();
             } else {
-                System.out.println(product.getSlot() + ") " + product.getName() + " " + product.getCost() + " SOLD OUT");
+                inventory[i] = productList.get(i).getSlot() + ") " + productList.get(i).getName() + " " +
+                        productList.get(i).getCost() + " SOLD OUT";
             }
         }
+        return inventory;
     }
 
         //TODO (maybe a Logger class?)

@@ -1,13 +1,10 @@
 package com.techelevator;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.*;
 
-public class
-UserInterface {
+public class UserInterface {
     VendingMachine vendingMachine;
 
     public UserInterface(VendingMachine vendingMachine) {
@@ -15,7 +12,6 @@ UserInterface {
     }
 
     Scanner userInput = new Scanner(System.in);
-
 
     public void run() throws FileNotFoundException {
         mainMenu();
@@ -30,7 +26,12 @@ UserInterface {
             menuSelection = userInput.nextLine();
 
             if (menuSelection.equals("1")) {
-                vendingMachine.displayInventory();
+                String[] inventory = vendingMachine.displayInventory();
+                for (String displayProduct : inventory) {
+                    System.out.println(displayProduct);
+                }
+
+
             } else if (menuSelection.equals("2")) {
                 purchaseMenu();
 
@@ -80,13 +81,13 @@ UserInterface {
                 try {
                     BigDecimal moneyToAdd = BigDecimal.valueOf(Long.parseLong(userInput.nextLine()));
 
-                    if (moneyToAdd.intValue() < 0) {
-                        System.out.println("Invalid amount.");
+                    if (moneyToAdd.intValue() <= 0) {
+                        System.out.println("Please enter a reasonable number :)");
                     } else {
                         vendingMachine.addMoney(moneyToAdd);
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("Please enter a numerical number.");
+                    System.out.println("Please enter a reasonable number :)");
                 }
             } else if (feedMoneyMenuSelection.equals("2")) {
                 System.out.println("Your current balance is " + vendingMachine.getCurrentMoney() + ".");
@@ -95,7 +96,11 @@ UserInterface {
     }
 
     public void purchaseProductMenu() throws FileNotFoundException {
-        vendingMachine.displayInventory();
+        String[] inventory = vendingMachine.displayInventory();
+        for (String displayProduct : inventory) {
+            System.out.println(displayProduct);
+        }
+        System.out.println("Select product slot:");
         String itemPurchased = userInput.nextLine();
         if (!vendingMachine.inventory.getInventory().keySet().contains(itemPurchased)) {
             System.out.println("Invalid entry, try again");
@@ -110,9 +115,11 @@ UserInterface {
             return;
         }
         vendingMachine.makePurchase(itemPurchased);
-        System.out.println(vendingMachine.inventory.getInventory().get(itemPurchased).getName() + " " +
-                vendingMachine.inventory.getInventory().get(itemPurchased).getCost() + " Current Balance: " +
-                vendingMachine.getCurrentMoney());
+        System.out.println(
+            vendingMachine.inventory.getInventory().get(itemPurchased).getName() +
+            " " + vendingMachine.inventory.getInventory().get(itemPurchased).getCost() +
+            " Current Balance: " +vendingMachine.getCurrentMoney());
+
         System.out.println((vendingMachine.inventory.getInventory().get(itemPurchased).getMessage()));
     }
 }
