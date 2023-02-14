@@ -25,7 +25,11 @@ public class VendingMachine {
     }
 
     public boolean checkMoney(String itemToPurchase) {
-        return (inventory.getInventory().get(itemToPurchase).getCost().intValue() <= currentMoney.intValue());
+        int compareTo = currentMoney.compareTo(inventory.getInventory().get(itemToPurchase).getCost());
+        if (compareTo == 1) {
+            return true;
+        }
+        return false;
     }
 
     public void addMoney(BigDecimal moneyToAdd) {
@@ -40,6 +44,7 @@ public class VendingMachine {
     public void makePurchase(String itemToPurchase) {
         //todo (utilize inventory method)
         totalSales  = totalSales.add(inventory.getInventory().get(itemToPurchase).getCost());
+
         currentMoney =  currentMoney.subtract(inventory.getInventory().get(itemToPurchase).getCost());
         inventory.getInventory().get(itemToPurchase).reduceQuantity();
         filePurchaseToLog(inventory.getInventory().get(itemToPurchase));

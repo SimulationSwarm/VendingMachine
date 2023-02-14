@@ -5,6 +5,7 @@ import java.util.*;
 
 public class Inventory {
     private Map<String, Product> inventory;
+
     public Inventory(Map<String, Product> inventory) {
         this.inventory = inventory;
     }
@@ -18,7 +19,7 @@ public class Inventory {
     public List<Product> buildProductList() throws FileNotFoundException {
         List<Product> productArrayList = new ArrayList<>();
         productArrayList.addAll(inventory.values());
-        Collections.sort(productArrayList, new Sortbyslot());
+        Collections.sort(productArrayList, new SortBySlot());
         return productArrayList;
     }
 

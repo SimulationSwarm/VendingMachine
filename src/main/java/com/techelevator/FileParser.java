@@ -5,14 +5,14 @@ import java.math.BigDecimal;
 import java.util.*;
 
 public class FileParser {
-    private final String inventoryPath;
+    private final String inventoryPath;  //instance variable
 
-    public FileParser(String inventoryPath) {
+    public FileParser(String inventoryPath) { //constructor
         this.inventoryPath = inventoryPath;
     }
 
     public Map<String,Product> buildVendingMachineInventory() throws FileNotFoundException {
-        Map<String, Product> vendingMachineInventory = new HashMap<>();
+        Map<String, Product> vendingMachineInventory = new HashMap<>(); //create a hashmap
         File file = new File(inventoryPath);
         try (Scanner inventoryReader = new Scanner(file)) {
             while (inventoryReader.hasNextLine()) {
@@ -22,9 +22,7 @@ public class FileParser {
         }   catch (FileNotFoundException  e) {
                     System.out.println("Invalid file path, try again.");
             }
-//        for (int i = 0; i < productList.size(); i++) {
-//            vendingMachineInventory.put(productList.get(i).getSlot(), productList.get(i));
-//        }
+
         return vendingMachineInventory;
     }
     public Product getProductFromLine(String line) {

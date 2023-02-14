@@ -5,7 +5,7 @@ import java.util.Comparator;
 
 public abstract class Product {
     private String name;
-    private BigDecimal cost = new BigDecimal("00.00");
+    private BigDecimal cost;
     private String slot;
     private int quantity = 5;
 
@@ -39,7 +39,7 @@ public abstract class Product {
 
 }
 
- class Sortbyslot implements Comparator<Product> {
+ class SortBySlot implements Comparator<Product> {
 
      @Override
      public int compare(Product a, Product b) {
